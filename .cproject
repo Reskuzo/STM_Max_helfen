@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+  <storageModule moduleId="org.eclipse.cdt.core.settings">
+    <cconfiguration id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1960001046">
+      <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1960001046" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+        <externalSettings/>
+        <extensions>
+          <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+          <extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+          <extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+          <extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+          <extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+          <extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+        </extensions>
+      </storageModule>
+      <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        <configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="Debug" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.CWDLocator;org.eclipse.cdt.core.GCCErrorParser" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1960001046" name="Debug" parent="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug">
+          <folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1960001046." name="/" resourcePath="">
+            <toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug.1271827988" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug">
+              <option id="com.st.stm32cube.ide.mcu.option.board.name.1" name="Board" superClass="com.st.stm32cube.ide.mcu.option.board.name" value="STM32H735G-DK" valueType="string"/>
+              <option id="com.st.stm32cube.ide.mcu.option.mcu.name.1" name="Mcu" superClass="com.st.stm32cube.ide.mcu.option.mcu.name" value="STM32H735ZGTx" valueType="string"/>
+              <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.1" name="Floating-point ABI" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.hard" valueType="enumerated"/>
+              <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.1" name="Floating-point hardware" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.fpv5-d16" valueType="enumerated"/>
+              <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.instructionset.1" name="Instruction Set" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.instructionset" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.instructionset.thumb" valueType="enumerated"/>
+              <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.arch.1" name="Architecture" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.arch" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.arch.cortexm7" valueType="enumerated"/>
+              <targetPlatform id="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetPlatform.1" isAbstract="false" name="Platform" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetPlatform"/>
+              <builder buildPath="${workspace_loc:/STM_SoundAnalysis_H735/Debug}" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder.1" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder"/>
+              <tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.1596050539" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler">
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols.1" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="DEBUG"/>
+                </option>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.includepaths.1" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.includepaths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="../Core/Inc"/>
+                </option>
+                <inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
+              </tool>
+              <tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler">
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.1" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.g3" valueType="enumerated"/>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.1" name="Optimization" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.Og" valueType="enumerated"/>
+                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols.1" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols" valueType="definedSymbols">
+                  <listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+                  <listOptionValue builtIn="false" value="STM32H735xx"/>
+                  <listOptionValue builtIn="false" value="USE_PWR_DIRECT_SMPS_SUPPLY"/>
+                  <listOptionValue builtIn="false" value="DEBUG"/>
+                </option>
+                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.1" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" valueType="includePath">
+                  <listOptionValue builtIn="false" value="../Core/Inc"/>
+                  <listOptionValue builtIn="false" value="../Core/Src/Navigation"/>
+                  <listOptionValue builtIn="false" value="../Drivers/STM32H7xx_HAL_Driver/Inc"/>
+                  <listOptionValue builtIn="false" value="../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy"/>
+                  <listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32H7xx/Include"/>
+                  <listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/STM32H735G-DK}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/Components/Common}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/Components/rk043fn48h}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/Components/ft5336}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/Components/gt911}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/Components/s70kl1281}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Drivers/BSP/Components/wm8994}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Middlewares/ST/STM32_Audio/Addons/PDM/Inc}"/>
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Utilities/lcd}"/>
+                </option>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.warningcountermeasures.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.warningcountermeasures" valueType="boolean" value="true"/>
+                <inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input"/>
+              </tool>
+              <tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.1" name="MCU G++ Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler">
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.g3" valueType="enumerated"/>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.Og" valueType="enumerated"/>
+              </tool>
+              <tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.1" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker">
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script.1" name="Linker Script (-T)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script" value="../STM32H735ZGKX_FLASH.ld" valueType="string"/>
+                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.libs.1" name="Libraries (-l)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.libs" valueType="libs">
+                  <listOptionValue builtIn="false" value=":libPDMFilter_CM7_GCC_wc32.a"/>
+                  <listOptionValue builtIn="false" value="m"/>
+                  <listOptionValue builtIn="false" value="c"/>
+                  <listOptionValue builtIn="false" value="nosys"/>
+                </option>
+                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.paths.1" name="Library search path (-L)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.paths" valueType="libPaths">
+                  <listOptionValue builtIn="false" value="${workspace_loc:/STM_SoundAnalysis_H735/Middlewares/ST/STM32_Audio/Addons/PDM/Lib}"/>
+                </option>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.no-start-files.1" name="-nostartfiles" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.no-start-files" value="false" valueType="boolean"/>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.no-default-libs.1" name="-nodefaultlibs" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.no-default-libs" value="false" valueType="boolean"/>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.printmemoryusage.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.printmemoryusage" value="true" valueType="boolean"/>
+                <option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.mapfile.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.mapfile" value="true" valueType="boolean"/>
+                <inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input.1" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input">
+                  <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+                  <additionalInput kind="additionalinput" paths="$(LIBS)"/>
+                </inputType>
+              </tool>
+              <tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.1" name="MCU Size" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size"/>
+            </toolChain>
+          </folderInfo>
+          <sourceEntries>
+            <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+            <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+            <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares/ST/STM32_Audio/Addons/PDM"/>
+            <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Utilities/lcd"/>
+          </sourceEntries>
+        </configuration>
+      </storageModule>
+      <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+    </cconfiguration>
+  </storageModule>
+  <storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+  <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+    <project id="STM_SoundAnalysis_H735.com.st.stm32cube.ide.mcu.gnu.managedbuild.target.exe.debug.1" name="Executable" projectType="com.st.stm32cube.ide.mcu.gnu.managedbuild.target.exe.debug"/>
+  </storageModule>
+  <storageModule moduleId="scannerConfiguration">
+    <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+  </storageModule>
+  <storageModule moduleId="org.eclipse.cdt.core.ReferencedProjectsPathInfo"/>
+  <storageModule moduleId="com.st.stm32cube.ide.mcu.gnu.managedbuild.module.stm32BuildConfigExtendedInfo">
+    <cconfigurationExtendedInfo configId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1960001046" coreSuffix="_M7"/>
+  </storageModule>
+</cproject>
