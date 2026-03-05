@@ -1,4 +1,4 @@
-/* USER CODE BEGIN Header */
+﻿/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    stm32h7xx_it.c
@@ -199,5 +199,31 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
+/* ---- DFSDM DMA IRQ Handlers for digital microphones (DFSDM Instance 2) ---- */
 
+/* DMA2 Stream7: DFSDM1 MIC1 (left channel) */
+void DMA2_Stream7_IRQHandler(void)
+{
+    BSP_AUDIO_IN_IRQHandler(2, AUDIO_IN_DEVICE_DIGITAL_MIC1);
+}
+
+/* DMA2 Stream0: DFSDM1 MIC2 (right channel) */
+void DMA2_Stream0_IRQHandler(void)
+{
+    BSP_AUDIO_IN_IRQHandler(2, AUDIO_IN_DEVICE_DIGITAL_MIC2);
+}
+
+/* ---- USART3 IRQ Handler for remote UART input ---- */
+extern UART_HandleTypeDef huart_input;
+
+void USART3_IRQHandler(void)
+{
+    HAL_UART_IRQHandler(&huart_input);
+}
+
+/* ---- EXTI15_10: BUTTON_USER (PC13) ---- */
+void EXTI15_10_IRQHandler(void)
+{
+    BSP_PB_IRQHandler(BUTTON_USER);
+}
 /* USER CODE END 1 */

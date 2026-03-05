@@ -1,4 +1,4 @@
-/* USER CODE BEGIN Header */
+﻿/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    stm32h7xx_hal_conf.h
@@ -44,7 +44,7 @@
 /* #define HAL_CRYP_MODULE_ENABLED   */
 #define HAL_DAC_MODULE_ENABLED
 /* #define HAL_DCMI_MODULE_ENABLED   */
-/* #define HAL_DMA2D_MODULE_ENABLED   */
+#define HAL_DMA2D_MODULE_ENABLED
 #define HAL_ETH_MODULE_ENABLED
 /* #define HAL_ETH_LEGACY_MODULE_ENABLED   */
 /* #define HAL_NAND_MODULE_ENABLED   */
@@ -59,7 +59,7 @@
 /* #define HAL_JPEG_MODULE_ENABLED   */
 /* #define HAL_OPAMP_MODULE_ENABLED   */
 #define HAL_OSPI_MODULE_ENABLED
-/* #define HAL_I2S_MODULE_ENABLED   */
+#define HAL_I2S_MODULE_ENABLED
 /* #define HAL_SMBUS_MODULE_ENABLED   */
 /* #define HAL_IWDG_MODULE_ENABLED   */
 /* #define HAL_LPTIM_MODULE_ENABLED   */
@@ -82,7 +82,7 @@
 /* #define HAL_WWDG_MODULE_ENABLED   */
 /* #define HAL_PCD_MODULE_ENABLED   */
 /* #define HAL_HCD_MODULE_ENABLED   */
-/* #define HAL_DFSDM_MODULE_ENABLED   */
+#define HAL_DFSDM_MODULE_ENABLED
 /* #define HAL_DSI_MODULE_ENABLED   */
 /* #define HAL_JPEG_MODULE_ENABLED   */
 /* #define HAL_MDIOS_MODULE_ENABLED   */
