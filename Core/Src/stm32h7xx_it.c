@@ -202,7 +202,7 @@ void SysTick_Handler(void)
 /* ---- BDMA Channel 1: SAI4 PDM microphone (Audio IN Instance 1) ---- */
 void BDMA_Channel1_IRQHandler(void)
 {
-    BSP_AUDIO_IN_IRQHandler(1, AUDIO_IN_DEVICE_DIGITAL_MIC);
+    BSP_AUDIO_IN_IRQHandler(1, AUDIO_IN_DEVICE_DIGITAL_MIC1);
 }
 
 /* ---- USART3 IRQ Handler for remote UART input ---- */
