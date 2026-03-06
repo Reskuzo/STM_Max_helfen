@@ -70,17 +70,18 @@ void process_PDM_to_PCM(uint32_t startEntryOffset)
 
 void BSP_AUDIO_IN_HalfTransfer_CallBack(uint32_t Instance)
 {
-    if (Instance == AUDIO_INSTANCE) {
-        process_PDM_to_PCM(0);
-    }
+    /* BSP SAI RX callbacks always pass Instance=0 regardless of SAI instance used.
+     * Since there is only one audio input, process unconditionally. */
+    (void)Instance;
+    process_PDM_to_PCM(0);
 }
 
 void BSP_AUDIO_IN_TransferComplete_CallBack(uint32_t Instance)
 {
-    if (Instance == AUDIO_INSTANCE) {
-        BSP_LED_Toggle(LED1);
-        process_PDM_to_PCM(AUDIO_IN_PDM_BUFFER_SIZE / 2);
-    }
+    /* See HalfTransfer note above — BSP hardcodes Instance=0 for SAI RX path. */
+    (void)Instance;
+    BSP_LED_Toggle(LED1);
+    process_PDM_to_PCM(AUDIO_IN_PDM_BUFFER_SIZE / 2);
 }
 
 void BSP_AUDIO_IN_Error_CallBack(uint32_t Instance)
