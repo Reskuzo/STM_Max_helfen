@@ -47,6 +47,11 @@ static void ensure_fft_init(void)
     }
 }
 
+/* Set to 1 to bypass the PDM library and display raw DMA buffer values directly.
+ * If the waveform varies with sound in RAW mode → PDM library issue.
+ * If the waveform is still flat in RAW mode → DMA buffer is constant (SAI/cache issue). */
+#define PDM_RAW_DIAGNOSTIC 0
+
 /* Convert one PDM half-buffer to PCM and accumulate into PcmAudioBuffer ring */
 void process_PDM_to_PCM(uint32_t startEntryOffset)
 {
@@ -54,7 +59,18 @@ void process_PDM_to_PCM(uint32_t startEntryOffset)
 
     uint16_t *startEntry = &recordPDMBuf[startEntryOffset];
     int16_t temp_pcm[32]; /* 16 stereo pairs interleaved */
+
+#if PDM_RAW_DIAGNOSTIC
+    /* RAW MODE: copy raw DMA halfwords directly (bypasses PDM filter).
+     * Raw PDM is a bitstream so the display will look noisy — that is expected.
+     * A flat line here means the DMA buffer itself is constant (not the filter). */
+    for (uint32_t i = 0; i < 16; i++) {
+        temp_pcm[i * 2]     = (int16_t)startEntry[i * 2];
+        temp_pcm[i * 2 + 1] = (int16_t)startEntry[i * 2 + 1];
+    }
+#else
     BSP_AUDIO_IN_PDMToPCM(AUDIO_INSTANCE, startEntry, (uint16_t *)temp_pcm);
+#endif
 
     /* Average L+R into mono ring buffer */
     for (uint32_t i = 0; i < 16; i++) {
