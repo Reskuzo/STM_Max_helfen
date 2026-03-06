@@ -205,6 +205,14 @@ void BDMA_Channel1_IRQHandler(void)
     BSP_AUDIO_IN_IRQHandler(1, AUDIO_IN_DEVICE_DIGITAL_MIC1);
 }
 
+/* ---- SAI4 peripheral error handler (overrun/underrun detection) ----
+ * If this fires and LED2 lights up, SAI4 has an OVR/UDR error.
+ * Possible causes: PDM clock incorrect, FIFO not drained in time. */
+void SAI4_IRQHandler(void)
+{
+    HAL_SAI_IRQHandler(&haudio_in_sai[1]);
+}
+
 /* ---- USART3 IRQ Handler for remote UART input ---- */
 extern UART_HandleTypeDef huart_input;
 

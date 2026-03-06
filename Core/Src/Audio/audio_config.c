@@ -47,10 +47,16 @@ static void ensure_fft_init(void)
     }
 }
 
-/* Set to 1 to bypass the PDM library and display raw DMA buffer values directly.
- * If the waveform varies with sound in RAW mode → PDM library issue.
- * If the waveform is still flat in RAW mode → DMA buffer is constant (SAI/cache issue). */
-#define PDM_RAW_DIAGNOSTIC 0
+/* PDM_RAW_DIAGNOSTIC mode (set to 1 to bypass the PDM library):
+ *   Displays bit-density of each raw DMA halfword, scaled to ±32000.
+ *   All-zeros buffer  → flat line at BOTTOM  (−32000): DATA pin held low,
+ *                        SAI4 not receiving bits (check PDM clock / mic power).
+ *   All-0xFFFF buffer → flat line at TOP     (+32000): DATA pin pulled high,
+ *                        PDM clock NOT reaching the mic (check PE2 / SAI4 MCLK).
+ *   Noisy signal near center                          : PDM clock is working,
+ *                        mic is outputting data — issue is in PDM→PCM filter.
+ * Set back to 0 once the root cause is found. */
+#define PDM_RAW_DIAGNOSTIC 1
 
 /* Convert one PDM half-buffer to PCM and accumulate into PcmAudioBuffer ring */
 void process_PDM_to_PCM(uint32_t startEntryOffset)
@@ -61,12 +67,15 @@ void process_PDM_to_PCM(uint32_t startEntryOffset)
     int16_t temp_pcm[32]; /* 16 stereo pairs interleaved */
 
 #if PDM_RAW_DIAGNOSTIC
-    /* RAW MODE: copy raw DMA halfwords directly (bypasses PDM filter).
-     * Raw PDM is a bitstream so the display will look noisy — that is expected.
-     * A flat line here means the DMA buffer itself is constant (not the filter). */
+    /* BIT-DENSITY MODE: count '1' bits per halfword, centre at 8.
+     * Scale by 4000 so the result fills ~±32000 of the int16 range.
+     *   all-0x0000 → popcount=0  → (0-8)*4000 = -32000  (bottom of display)
+     *   all-0xFFFF → popcount=16 → (16-8)*4000= +32000  (top of display)
+     *   PDM silence → popcount≈8 → ≈0              (noisy centre)         */
     for (uint32_t i = 0; i < 16; i++) {
-        temp_pcm[i * 2]     = (int16_t)startEntry[i * 2];
-        temp_pcm[i * 2 + 1] = (int16_t)startEntry[i * 2 + 1];
+        int16_t density = (int16_t)(__builtin_popcount(startEntry[i * 2])     - 8) * 4000;
+        temp_pcm[i * 2]     = density;
+        temp_pcm[i * 2 + 1] = (int16_t)(__builtin_popcount(startEntry[i * 2 + 1]) - 8) * 4000;
     }
 #else
     BSP_AUDIO_IN_PDMToPCM(AUDIO_INSTANCE, startEntry, (uint16_t *)temp_pcm);
