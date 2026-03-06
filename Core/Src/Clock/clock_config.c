@@ -173,3 +173,59 @@ HAL_StatusTypeDef MX_SAI4_ClockConfig(SAI_HandleTypeDef *hsai, uint32_t SampleRa
 
     return HAL_RCCEx_PeriphCLKConfig(&rcc);
 }
+
+/* Override the BSP __weak MX_SAI4_Block_A_Init.
+ *
+ * ROOT-CAUSE FIX: the H735G-DK BSP never sets NoDivider, leaving it 0
+ * (SAI_MASTERDIVIDER_ENABLE). HAL_SAI_Init then uses the NODIV=0 formula:
+ *   MCKDIV = SAI_CK / (AudioFrequency x 256) = 49.14 MHz / 32.8 MHz ~ 1
+ *   -> PDM_CLK = 49.14 MHz / (1 x 2) ~ 24 MHz  (8x above IMP34DT05 max!)
+ *
+ * With NoDivider = SAI_MASTERDIVIDER_DISABLE (NODIV=1), HAL uses:
+ *   MCKDIV = SAI_CK / (AudioFrequency x FrameLength)
+ *          = 49.14 MHz / (128000 x 16) = 24
+ *   -> PDM_CLK = 49.14 MHz / (24 x 2) ~ 1.02 MHz  (within IMP34DT05 spec: 1.0-3.25 MHz)
+ */
+HAL_StatusTypeDef MX_SAI4_Block_A_Init(SAI_HandleTypeDef *hsai, MX_SAI_Config *MXConfig)
+{
+    HAL_StatusTypeDef ret = HAL_OK;
+
+    __HAL_SAI_DISABLE(hsai);
+
+    hsai->Init.AudioMode           = MXConfig->AudioMode;
+    hsai->Init.MonoStereoMode      = MXConfig->MonoStereoMode;
+    hsai->Init.Protocol            = SAI_FREE_PROTOCOL;
+    hsai->Init.DataSize            = MXConfig->DataSize;
+    hsai->Init.FirstBit            = SAI_FIRSTBIT_LSB;
+    hsai->Init.ClockStrobing       = MXConfig->ClockStrobing;
+    hsai->Init.Synchro             = MXConfig->Synchro;
+    hsai->Init.OutputDrive         = MXConfig->OutputDrive;
+    hsai->Init.FIFOThreshold       = SAI_FIFOTHRESHOLD_1QF;
+    hsai->Init.SynchroExt          = MXConfig->SynchroExt;
+    hsai->Init.CompandingMode      = SAI_NOCOMPANDING;
+    hsai->Init.TriState            = SAI_OUTPUT_RELEASED;
+    hsai->Init.NoDivider           = SAI_MASTERDIVIDER_DISABLE; /* NODIV=1: FRL-based MCKDIV */
+    hsai->Init.Mckdiv              = 0;    /* auto-computed: SAI_CK/(AudioFreq*FRL) = ~24 */
+    hsai->Init.AudioFrequency      = MXConfig->AudioFrequency;
+    hsai->Init.PdmInit.Activation  = ENABLE;
+    hsai->Init.PdmInit.MicPairsNbr = 1;
+    hsai->Init.PdmInit.ClockEnable = SAI_PDM_CLOCK1_ENABLE;
+
+    hsai->FrameInit.FrameLength       = MXConfig->FrameLength;
+    hsai->FrameInit.ActiveFrameLength = MXConfig->ActiveFrameLength;
+    hsai->FrameInit.FSDefinition      = SAI_FS_STARTFRAME;
+    hsai->FrameInit.FSPolarity        = SAI_FS_ACTIVE_HIGH;
+    hsai->FrameInit.FSOffset          = SAI_FS_FIRSTBIT;
+
+    hsai->SlotInit.FirstBitOffset = 0;
+    hsai->SlotInit.SlotSize       = SAI_SLOTSIZE_DATASIZE;
+    hsai->SlotInit.SlotNumber     = 1;
+    hsai->SlotInit.SlotActive     = MXConfig->SlotActive;
+
+    if (HAL_SAI_Init(hsai) != HAL_OK)
+    {
+        ret = HAL_ERROR;
+    }
+    __HAL_SAI_ENABLE(hsai);
+    return ret;
+}
