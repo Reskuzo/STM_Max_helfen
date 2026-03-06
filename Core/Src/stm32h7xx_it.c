@@ -199,18 +199,10 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
-/* ---- DFSDM DMA IRQ Handlers for digital microphones (DFSDM Instance 2) ---- */
-
-/* DMA2 Stream7: DFSDM1 MIC1 (left channel) */
-void DMA2_Stream7_IRQHandler(void)
+/* ---- BDMA Channel 1: SAI4 PDM microphone (Audio IN Instance 1) ---- */
+void BDMA_Channel1_IRQHandler(void)
 {
-    BSP_AUDIO_IN_IRQHandler(2, AUDIO_IN_DEVICE_DIGITAL_MIC1);
-}
-
-/* DMA2 Stream0: DFSDM1 MIC2 (right channel) */
-void DMA2_Stream0_IRQHandler(void)
-{
-    BSP_AUDIO_IN_IRQHandler(2, AUDIO_IN_DEVICE_DIGITAL_MIC2);
+    BSP_AUDIO_IN_IRQHandler(1, AUDIO_IN_DEVICE_DIGITAL_MIC);
 }
 
 /* ---- USART3 IRQ Handler for remote UART input ---- */
