@@ -2,7 +2,7 @@
  * clock_config.c - H735G-DK adaptation
  * System: 520 MHz (PLLM=5, PLLN=104, PLLP=1, HSE=25MHz)
  * MPU: OctoSPI RAM @ 0x70000000, OctoSPI Flash @ 0x90000000
- * No SDRAM, No SAI4 PDM override.
+ * SAI4 PDM: overrides MX_SAI4_ClockConfig to set all PLL2 fields explicitly.
  */
 #include "clock_config.h"
 #include "main.h"
@@ -129,4 +129,47 @@ void CPU_CACHE_Enable(void)
 {
     SCB_EnableICache();
     SCB_EnableDCache();
+}
+
+/* Override the BSP __weak MX_SAI4_ClockConfig so that ALL PLL2 fields are
+ * explicitly set — the default BSP implementation reads PLL2VCOSEL / PLL2RGE
+ * from stale reset registers and never writes them back, which is fragile.
+ *
+ * Configuration (48 kHz group, covers 8/16/32/48/96 kHz):
+ *   HSE = 25 MHz,  PLL2M = 25  →  VCO_in  = 1 MHz  (VCIRANGE_0: 1–2 MHz)
+ *   PLL2N = 344                →  VCO_out = 344 MHz  (VCOMEDIUM: 150–420 MHz)
+ *   PLL2P = 7                  →  SAI4_CK = 49.14 MHz
+ *   MCKDIV ≈ 24  →  PDM_CLK   ≈ 2.05 MHz  (IMP34DT05 spec: 1.0–3.25 MHz ✓)
+ *
+ * 44.1 kHz group (11/22/44 kHz) uses PLL2N=271 / PLL2P=24 → 11.289 MHz SAI_CK.
+ */
+HAL_StatusTypeDef MX_SAI4_ClockConfig(SAI_HandleTypeDef *hsai, uint32_t SampleRate)
+{
+    UNUSED(hsai);
+
+    RCC_PeriphCLKInitTypeDef rcc = {0};
+
+    if ((SampleRate == AUDIO_FREQUENCY_11K) ||
+        (SampleRate == AUDIO_FREQUENCY_22K) ||
+        (SampleRate == AUDIO_FREQUENCY_44K))
+    {
+        rcc.PLL2.PLL2N = 271;
+        rcc.PLL2.PLL2P = 24;
+    }
+    else
+    {
+        rcc.PLL2.PLL2N = 344;
+        rcc.PLL2.PLL2P = 7;
+    }
+
+    rcc.PeriphClockSelection   = RCC_PERIPHCLK_SAI4A;
+    rcc.Sai4AClockSelection    = RCC_SAI4ACLKSOURCE_PLL2;
+    rcc.PLL2.PLL2M             = 25;
+    rcc.PLL2.PLL2Q             = 1;
+    rcc.PLL2.PLL2R             = 1;
+    rcc.PLL2.PLL2FRACN         = 0;
+    rcc.PLL2.PLL2RGE           = RCC_PLL2VCIRANGE_0;   /* VCO_in 1–2 MHz   */
+    rcc.PLL2.PLL2VCOSEL        = RCC_PLL2VCOMEDIUM;    /* VCO_out 150–420 MHz */
+
+    return HAL_RCCEx_PeriphCLKConfig(&rcc);
 }
