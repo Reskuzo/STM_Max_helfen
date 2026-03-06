@@ -1,5 +1,5 @@
 ﻿/*
- * audio_config.h - H735G-DK adaptation (DFSDM Instance 2)
+ * audio_config.h - H735G-DK: SAI4 PDM Instance 1 (same as H747-DISCO)
  */
 #ifndef SRC_AUDIO_AUDIO_CONFIG_H_
 #define SRC_AUDIO_AUDIO_CONFIG_H_
@@ -12,14 +12,14 @@
 /* External reference to BSP Audio context */
 extern AUDIO_IN_Ctx_t Audio_In_Ctx[];
 
-/* Buffer sizes */
-#define AUDIO_IN_PCM_BUFFER_SIZE  512   /* mono samples per processing frame  */
-#define DFSDM_STEREO_BUF_SAMPLES  (AUDIO_IN_PCM_BUFFER_SIZE * 2) /* L,R interleaved, double-buffered */
+/* Buffer sizes - identical to H747 project */
+#define AUDIO_IN_PDM_BUFFER_SIZE  1024  /* PDM samples (16-bit words) per DMA half */
+#define AUDIO_IN_PCM_BUFFER_SIZE  512   /* mono PCM samples per processing frame   */
 #define RECORD_BUFFER_SIZE        4096
-#define AUDIO_INSTANCE            2     /* H735G-DK: Instance 2 = DFSDM        */
+#define AUDIO_INSTANCE            1     /* Instance 1 = SAI4 PDM (same as H747)    */
 
-/* DFSDM stereo recording buffer (DMA-filled, double-buffered circular) */
-extern int16_t dfsdmStereoBuffer[DFSDM_STEREO_BUF_SAMPLES * 2];
+/* PDM recording buffer in D3 SRAM (BDMA can only access D3 domain) */
+extern uint16_t recordPDMBuf[AUDIO_IN_PDM_BUFFER_SIZE];
 
 /* Audio config globals */
 extern uint32_t AudioFreq[9];
@@ -43,10 +43,12 @@ extern volatile uint32_t audio_capture_tick;
 #define APPLY_FOURIER_FILTER 3
 #define DO_INVERSE_TRANSFORM 4
 
-/* Note: DO_PDM_PCM_TRANSFORM is unused on H735 (DFSDM gives PCM directly) */
 extern uint8_t audio_transforms;
 
 uint8_t processing_step_enabled(uint8_t step);
+
+/* PDM -> PCM conversion (called from DMA callbacks) */
+void process_PDM_to_PCM(uint32_t startEntryOffset);
 
 /* Callbacks */
 void BSP_AUDIO_IN_HalfTransfer_CallBack(uint32_t Instance);

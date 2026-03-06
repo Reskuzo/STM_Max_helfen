@@ -1,9 +1,9 @@
 ﻿/*
- * audio_main.c - H735G-DK: DFSDM Instance 2 (digital microphones)
- * No PDM->PCM conversion needed; DFSDM delivers 16-bit stereo PCM directly.
+ * audio_main.c - H735G-DK: SAI4 PDM Instance 1 (same as H747-DISCO)
  */
 #include "audio_main.h"
 #include "stm32h735g_discovery.h"
+#include "stm32h735g_discovery_audio.h"
 #include "main.h"
 
 uint8_t is_recording = 0;
@@ -12,10 +12,13 @@ void Audio_SETUP(void)
 {
     int32_t result;
 
-    /* Configure audio input for 2 digital mics via DFSDM Instance 2, 16 kHz */
+    /* Enable CRC – required by the PDM-to-PCM library */
+    __HAL_RCC_CRC_CLK_ENABLE();
+
+    /* Configure audio input: 1 digital microphone via SAI4 PDM, 16 kHz */
     AudioFreq_ptr = AudioFreq + 2;  /* index 2 = 16000 Hz */
 
-    AudioInInit.Device        = AUDIO_IN_DEVICE_DIGITAL_MIC;
+    AudioInInit.Device        = AUDIO_IN_DEVICE_DIGITAL_MIC1;
     AudioInInit.ChannelsNbr   = 2;
     AudioInInit.SampleRate    = *AudioFreq_ptr;
     AudioInInit.BitsPerSample = AUDIO_RESOLUTION_16B;
@@ -24,7 +27,7 @@ void Audio_SETUP(void)
     result = BSP_AUDIO_IN_Init(AUDIO_INSTANCE, &AudioInInit);
     if (result != BSP_ERROR_NONE)
     {
-        BSP_LED_On(LED2);  /* LED2 = RED on H735G-DK */
+        BSP_LED_On(LED2);
         Error_Handler();
     }
 }
@@ -32,10 +35,9 @@ void Audio_SETUP(void)
 void start_recording(void)
 {
     if (is_recording++ > 0) return;
-    /* dfsdmStereoBuffer is circular double-buffered; size in bytes */
-    uint32_t status = BSP_AUDIO_IN_Record(AUDIO_INSTANCE,
-                                          (uint8_t *)dfsdmStereoBuffer,
-                                          sizeof(dfsdmStereoBuffer));
+    uint32_t status = BSP_AUDIO_IN_RecordPDM(AUDIO_INSTANCE,
+                                              (uint8_t *)&recordPDMBuf,
+                                              AUDIO_IN_PDM_BUFFER_SIZE * sizeof(uint16_t));
     if (status != BSP_ERROR_NONE)
     {
         Error_Handler();
@@ -45,7 +47,7 @@ void start_recording(void)
 void stop_recording(void)
 {
     if (is_recording == 0) return;
-    BSP_AUDIO_IN_Stop(AUDIO_INSTANCE);
+    BSP_AUDIO_IN_Pause(AUDIO_INSTANCE);
     audio_ready  = 0;
     is_recording = 0;
 }

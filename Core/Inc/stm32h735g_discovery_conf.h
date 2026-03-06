@@ -17,7 +17,7 @@ extern "C" {
 #define I2C_VALID_TIMING_NBR                128U
 
 #define USE_AUDIO_CODEC_WM8994              1U
-#define USE_BSP_PDM_LIB_FEATURE             0U
+#define USE_BSP_PDM_LIB_FEATURE             1U
 
 #define DEFAULT_AUDIO_IN_BUFFER_SIZE        2048U
 #define USE_BSP_CPU_CACHE_MAINTENANCE       1U

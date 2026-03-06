@@ -1,5 +1,5 @@
 ﻿/*
- * audio_config.c - H735G-DK adaptation (DFSDM Instance 2, no PDM->PCM conversion)
+ * audio_config.c - H735G-DK: SAI4 PDM Instance 1 (same flow as H747-DISCO)
  */
 #define ARM_MATH_CM7
 #include "audio_config.h"
@@ -8,17 +8,15 @@
 #include "arm_math.h"
 #include <math.h>
 
-/* DFSDM stereo circular DMA buffer (double-buffered): L0,R0,L1,R1,...
- * Half: samples 0..DFSDM_STEREO_BUF_SAMPLES-1 filled first
- * Full: samples DFSDM_STEREO_BUF_SAMPLES..end filled next */
-int16_t dfsdmStereoBuffer[DFSDM_STEREO_BUF_SAMPLES * 2];
+/* PDM buffer in D3 SRAM - BDMA (used by SAI4) can only access D3 domain */
+ALIGN_32BYTES (uint16_t recordPDMBuf[AUDIO_IN_PDM_BUFFER_SIZE]) __attribute__((section(".RAM_D3")));
 
 /* Audio configuration globals */
 uint32_t AudioFreq[9] = {8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000, 192000};
 uint32_t *AudioFreq_ptr;
 BSP_AUDIO_Init_t AudioInInit;
 BSP_AUDIO_Init_t AudioOutInit;
-uint32_t VolumeLevel = 80;
+uint32_t VolumeLevel = 100;
 
 ALIGN_32BYTES (int16_t PcmAudioBuffer[AUDIO_IN_PCM_BUFFER_SIZE]);
 volatile uint32_t buffer_index = 0;
@@ -30,7 +28,7 @@ float FrequencyBuffer[AUDIO_IN_PCM_BUFFER_SIZE / 2];
 
 /* Audio transform pipeline bitmask */
 uint8_t audio_transforms = 0              +
-        (1 << DO_PDM_PCM_TRANSFORM) +   /* kept for API compatibility */
+        (1 << DO_PDM_PCM_TRANSFORM) +
         (1 << DO_FOURIER_TRANSFORM) +
         (1 << DO_INVERSE_TRANSFORM) +
         (1 << APPLY_FOURIER_FILTER) +
@@ -49,33 +47,39 @@ static void ensure_fft_init(void)
     }
 }
 
-/* Convert stereo int16 half-buffer to mono PCM */
-static void dfsdm_to_mono(const int16_t *stereo, uint32_t stereo_pairs, int16_t *mono_out)
+/* Convert one PDM half-buffer to PCM and accumulate into PcmAudioBuffer ring */
+void process_PDM_to_PCM(uint32_t startEntryOffset)
 {
-    for (uint32_t i = 0; i < stereo_pairs; i++) {
-        mono_out[i] = (int16_t)(((int32_t)stereo[2*i] + (int32_t)stereo[2*i+1]) >> 1);
+    if (!processing_step_enabled(DO_PDM_PCM_TRANSFORM)) return;
+
+    uint16_t *startEntry = &recordPDMBuf[startEntryOffset];
+    int16_t temp_pcm[32]; /* 16 stereo pairs interleaved */
+    BSP_AUDIO_IN_PDMToPCM(AUDIO_INSTANCE, startEntry, (uint16_t *)temp_pcm);
+
+    /* Average L+R into mono ring buffer */
+    for (uint32_t i = 0; i < 16; i++) {
+        PcmAudioBuffer[buffer_index] = (temp_pcm[i * 2] + temp_pcm[i * 2 + 1]) / 2;
+        buffer_index++;
+        if (buffer_index >= AUDIO_IN_PCM_BUFFER_SIZE) {
+            buffer_index = 0;
+            audio_capture_tick = HAL_GetTick();
+            audio_ready = 1;
+        }
     }
 }
 
-/* DFSDM half-transfer: first half of stereo buffer ready */
 void BSP_AUDIO_IN_HalfTransfer_CallBack(uint32_t Instance)
 {
     if (Instance == AUDIO_INSTANCE) {
-        dfsdm_to_mono(&dfsdmStereoBuffer[0], AUDIO_IN_PCM_BUFFER_SIZE / 2,
-                      &PcmAudioBuffer[0]);
+        process_PDM_to_PCM(0);
     }
 }
 
-/* DFSDM full-transfer: second half of stereo buffer ready */
 void BSP_AUDIO_IN_TransferComplete_CallBack(uint32_t Instance)
 {
     if (Instance == AUDIO_INSTANCE) {
         BSP_LED_Toggle(LED1);
-        dfsdm_to_mono(&dfsdmStereoBuffer[AUDIO_IN_PCM_BUFFER_SIZE],
-                      AUDIO_IN_PCM_BUFFER_SIZE / 2,
-                      &PcmAudioBuffer[AUDIO_IN_PCM_BUFFER_SIZE / 2]);
-        audio_capture_tick = HAL_GetTick();
-        audio_ready = 1;
+        process_PDM_to_PCM(AUDIO_IN_PDM_BUFFER_SIZE / 2);
     }
 }
 
